@@ -13,6 +13,8 @@ Hardware used in this project:
 - SG90 Servo motor
 - Basic components (breadboard, jumper wires, LEDs, resistors)
 
+For full hardware breakdown, see schematic.
+
 ## How it works
 
 This is a brief summary of the core principles. For a full technical breakdown, see theory.
