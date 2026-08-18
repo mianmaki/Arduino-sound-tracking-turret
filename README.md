@@ -5,16 +5,6 @@
 A turret that turns a servo motor to point roughly in the same direction as the direction a sound comes from. It utilizes 2 sound sensors and compares the differences in measured sound intensity and sound arrival time.
 I was interested in making some kind of turret as a personal project that can take an input (sound, light, heat, etc.) and figure out the direction it comes from. This is a modified version of my face tracking nerf gun turret.
 
-## Hardware & Components
-
-Hardware used in this project:
-- Arduino UNO
-- 2x KY-038 Sound sensor
-- SG90 Servo motor
-- Basic components (breadboard, jumper wires, LEDs, resistors)
-
-For full hardware breakdown, see schematic.
-
 ## Photos & Videos
 
 <img width="560" height="745" alt="kuva" src="https://github.com/user-attachments/assets/02f6733f-9799-4e21-969d-b09e8af0a090" />
