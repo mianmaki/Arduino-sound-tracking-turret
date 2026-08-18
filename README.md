@@ -5,16 +5,9 @@
 A turret that turns a servo motor to point roughly in the same direction as the direction a sound comes from. It utilizes 2 sound sensors and compares the differences in measured sound intensity and sound arrival time.
 I was interested in making some kind of turret as a personal project that can take an input (sound, light, heat, etc.) and figure out the direction it comes from. This is a modified version of my face tracking nerf gun turret.
 
-## Photos & Videos
-
-<img width="560" height="745" alt="kuva" src="https://github.com/user-attachments/assets/02f6733f-9799-4e21-969d-b09e8af0a090" />
-
-
-Demonstration video https://drive.google.com/file/d/1pTEz_3CLvrkCv_ZFWbNey6ct3iofEjy3/view?usp=sharing
-
 ## How it works
 
-This is a brief summary of the core principles. For a full technical breakdown, see theory. For complete hardware breakdown, see schematic.png
+This is a brief summary of the core principles. For a full technical breakdown, see theory. Full hardware shown in schematic further down.
 
 ### Measuring sound intensity
 
@@ -27,6 +20,17 @@ Unless the sound source is directly between the sensors, the sound will hit the 
 ### Pointing servo
 
 By drawing a triangle with the 2 sensors and the assumed point source of the sound, we can calculate the angles of said triangle with trigonometry, the ratio of measured intensities and the arrival time difference. Using this information we can also calculate the angle we want to point the servo towards.
+
+## Attachments
+Schematic
+<img width="1142" height="777" alt="kuva" src="https://github.com/user-attachments/assets/cbcb8997-39aa-4995-9ff4-b3226f4b0f27" />
+
+Final build
+<img width="560" height="745" alt="kuva" src="https://github.com/user-attachments/assets/02f6733f-9799-4e21-969d-b09e8af0a090" />
+
+
+Demonstration video https://drive.google.com/file/d/1pTEz_3CLvrkCv_ZFWbNey6ct3iofEjy3/view?usp=sharing
+
 
 ## Challenges
 
