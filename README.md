@@ -15,6 +15,12 @@ Hardware used in this project:
 
 For full hardware breakdown, see schematic.
 
+## Photos & Videos
+
+<img width="560" height="745" alt="kuva" src="https://github.com/user-attachments/assets/02f6733f-9799-4e21-969d-b09e8af0a090" />
+
+Demonstration video
+
 ## How it works
 
 This is a brief summary of the core principles. For a full technical breakdown, see theory.
@@ -61,13 +67,23 @@ The model draws a triangle in a 2D plane and uses angles within that plane. If w
 
 ### Accuracy
 
-work in progress
-
-## Mistakes
+The biggest problem with the turret is its inaccuracy. Due to sensor sensitivity mismatch, difficulty measuring arrival time difference, echoes, difficulty measuring sound intensity ratios and limitations of the KY-038 modules, the turret can sometimes find an approximately correct direction, but it's not reliable.
 
 ## What I learned
 
+- Signal processing
+- Analyzing data from sensors
+- Optimizing program runtime
+- Optimizing measurement accuracy
 - Hardware interrupts
-- 
+- Controlling motors with software
 
 ## Future improvements
+
+- Taking into account height:
+  - Being able to measure accurately even when sound comes from a different height
+  - Being able to also figure out which height it comes from; finding the source in 3D space
+  - Implementing at least a third sensor and a second servo to accomplish this (more sensors could also help accuracy since you can compare multiple time differences)
+- Having better suited microphones for accurate measurements (KY-038 not ideal for this project)
+- Processing AC signal with a different method
+- Having properly tuned microphones
