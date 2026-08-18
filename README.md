@@ -23,13 +23,19 @@ By drawing a triangle with the 2 sensors and the assumed point source of the sou
 
 ## Attachments
 Schematic
+
+
 <img width="1142" height="777" alt="kuva" src="https://github.com/user-attachments/assets/cbcb8997-39aa-4995-9ff4-b3226f4b0f27" />
 
+
 Final build
+
+
 <img width="560" height="745" alt="kuva" src="https://github.com/user-attachments/assets/02f6733f-9799-4e21-969d-b09e8af0a090" />
 
 
-Demonstration video https://drive.google.com/file/d/1pTEz_3CLvrkCv_ZFWbNey6ct3iofEjy3/view?usp=sharing
+Demonstration video 
+https://drive.google.com/file/d/1pTEz_3CLvrkCv_ZFWbNey6ct3iofEjy3/view?usp=sharing
 
 
 ## Challenges
