@@ -19,7 +19,7 @@ For full hardware breakdown, see schematic.
 
 <img width="560" height="745" alt="kuva" src="https://github.com/user-attachments/assets/02f6733f-9799-4e21-969d-b09e8af0a090" />
 
-Demonstration video
+Demonstration video https://drive.google.com/file/d/1pTEz_3CLvrkCv_ZFWbNey6ct3iofEjy3/view?usp=sharing
 
 ## How it works
 
@@ -67,7 +67,11 @@ The model draws a triangle in a 2D plane and uses angles within that plane. If w
 
 ### Accuracy
 
-The biggest problem with the turret is its inaccuracy. Due to sensor sensitivity mismatch, difficulty measuring arrival time difference, echoes, difficulty measuring sound intensity ratios and limitations of the KY-038 modules, the turret can sometimes find an approximately correct direction, but it's not reliable.
+The biggest problem with the turret is its inaccuracy. Due to sensor sensitivity mismatch, difficulty measuring arrival time difference, echoes, difficulty measuring sound intensity ratios and limitations of the KY-038 modules, the turret has trouble with finding the right direction accurately.
+
+## Results
+
+The turret can sometimes find generally the right direction, but with a lot of deviation and some measurements are completely off. Sometimes there is also a measurement error, shown by the red LED lighting up, which is when something in the program goes wrong and nonsensical values are measured.
 
 ## What I learned
 
