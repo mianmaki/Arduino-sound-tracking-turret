@@ -19,6 +19,7 @@ For full hardware breakdown, see schematic.
 
 <img width="560" height="745" alt="kuva" src="https://github.com/user-attachments/assets/02f6733f-9799-4e21-969d-b09e8af0a090" />
 
+
 Demonstration video https://drive.google.com/file/d/1pTEz_3CLvrkCv_ZFWbNey6ct3iofEjy3/view?usp=sharing
 
 ## How it works
