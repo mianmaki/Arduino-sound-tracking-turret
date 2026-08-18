@@ -14,7 +14,7 @@ Demonstration video https://drive.google.com/file/d/1pTEz_3CLvrkCv_ZFWbNey6ct3io
 
 ## How it works
 
-This is a brief summary of the core principles. For a full technical breakdown, see theory.
+This is a brief summary of the core principles. For a full technical breakdown, see theory. For complete hardware breakdown, see schematic.png
 
 ### Measuring sound intensity
 
