@@ -88,3 +88,11 @@ $AD = \frac{180}{π} \cos^{-1}(\frac{a^2 + d^2 - b^2}{2ad})$
 
 
 $BD = \frac{180}{π} \cos^{-1}(\frac{b^2 + d^2 - a^2}{2bd})$
+
+
+Our servo is located directly between the sensors, at a point we'll call $S$. The angle we want to calculate to move the servo is $α$, as depicted in the picture.
+
+<img width="826" height="660" alt="kuva" src="https://github.com/user-attachments/assets/2781ce8d-9d49-4479-8014-2db32a15889b" />
+
+
+Now we have a new length, between $S$ and $P$, which we'll call $l$.
