@@ -43,7 +43,7 @@ https://drive.google.com/file/d/1pTEz_3CLvrkCv_ZFWbNey6ct3iofEjy3/view?usp=shari
 
 ### Sensor sensitivity matching
 
-The sensors had to be tuned very precisely to not trigger from ambient noise, but from louder noises, such as a clap. Since the sensitivity was not suitable out of the box, they had to be tuned by hand by adjusting the potentiometer. Hence, there is a still small difference in sensitivity between sensors. To combat this a correction factor is introduced.
+The sensors had to be tuned very precisely to not trigger from ambient noise, but from louder noises that a human would react to, such as a clap. Since the sensitivity was not suitable out of the box, they had to be tuned by hand by adjusting the potentiometer. Hence, there is a still small difference in sensitivity between sensors. To combat this, a correction factor is introduced.
 
 ### Measuring arrival time difference
 
