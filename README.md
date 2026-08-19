@@ -55,13 +55,9 @@ In theory, this should be easy to detect by checking when the digital output tur
 
 Due to the oscillatory nature of sound, the analog output returns an AC signal. This means that when sound is detected, we measure both lower and higher values compared to ambient conditions. If the hardware only checks for, for example, a low enough value, depending on how the sound's waveform hits the sensor, it may go high before going lower and finally triggering the digital pin to go HIGH, causing a delay.
 
-### Measuring intensity accurately
+### Measuring intensity accurately & Echoes
 
-Due to the oscillating analog output, we can't just reliably measure one peak value. It would theoretically work, but capturing the exact moment it reaches the peak value is not reliable. Instead, we collect multiple samples over a short period of time and analyze the deviations from ambient readings statistically.
-
-### Echoes
-
-The model assumes that all the sound hitting each sensor is only the sound coming directly from the source. In reality, reflections off the walls will skew the measurements. To mitigate this, we need to collect samples from a short enough period of time, so that most reflections won't have reached the sensors yet. However, it's hard to clearly see the exact time when reflections start taking over from a graph.
+Due to the oscillating analog output, we can't just reliably measure one peak value. It would theoretically work, but capturing the exact moment it reaches the peak value is not reliable. Instead, we collect multiple samples over a short period of time and analyze the samples statistically. However, it's hard to know exactly how many samples you should collect, since as the measurement duration increases, more echoes bouncing off the walls will have reached the sensors and skewed the measurements, but we also need enough samples to have an accurate measurement.
 
 ### 3D Geometry
 
@@ -73,23 +69,22 @@ The biggest problem with the turret is its inaccuracy. Due to sensor sensitivity
 
 ## Results
 
-The turret can sometimes find generally the right direction, but with a lot of deviation and some measurements are completely off. Sometimes there is also a measurement error, shown by the red LED lighting up, which is when something in the program goes wrong and nonsensical values are measured.
+The turret can find the right general direction, but with a lot of deviation and some measurements are completely off. Sometimes there is also a measurement error, shown by the red LED lighting up, which is when something in the program goes wrong and nonsensical values are measured.
 
 ## What I learned
 
-- Signal processing
-- Analyzing data from sensors
+- Processing and analyzing signal data
 - Optimizing program runtime
 - Optimizing measurement accuracy
 - Hardware interrupts
-- Controlling motors with software
+- Programming with Arduino IDE
+- Designing with KiCad (learned it specifically for the schematic)
 
 ## Future improvements
 
 - Taking into account height:
   - Being able to measure accurately even when sound comes from a different height
-  - Being able to also figure out which height it comes from; finding the source in 3D space
+  - Being able to also figure out which height it comes from; finding the direction in 3D space
   - Implementing at least a third sensor and a second servo to accomplish this (more sensors could also help accuracy since you can compare multiple time differences)
 - Having better suited microphones for accurate measurements (KY-038 not ideal for this project)
-- Processing AC signal with a different method
 - Having properly tuned microphones
