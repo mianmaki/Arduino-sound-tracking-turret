@@ -31,7 +31,8 @@ Schematic
 Final build
 
 
-<img width="560" height="745" alt="kuva" src="https://github.com/user-attachments/assets/02f6733f-9799-4e21-969d-b09e8af0a090" />
+<img width="565" height="395" alt="kuva" src="https://github.com/user-attachments/assets/bea7f4a4-7aba-4abb-b74d-9ac454d0ade1" />
+
 
 
 Demonstration video 
