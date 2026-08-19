@@ -26,11 +26,19 @@ $\frac{b}{a} = \sqrt{\frac{I_L}{I_R}}$ , let's call this ratio $k$,
 
 $k = \frac{b}{a} = \sqrt{\frac{I_L}{I_R}}$
 
-When our sound wave hits the KY-038 sensor, it will return an AC signal at the analog output, due to sound waves being oscillatory. The intensity of the sound is directly proportional to the energy it transfers into the microphone, which we can assume to be directly proportional to the voltage. Please note that since the voltage is oscillating, there will be readings both higher and lower than the readings from ambient noise. For describing the amount of energy the sound wave carries, it doesn't matter whether the voltage is higher or lower, so we'll be measuring the difference between our measured voltage and the ambient voltage.
+When our sound wave hits the KY-038 sensor, it will return an AC signal at the analog output, due to sound waves being oscillatory. The intensity of the sound is directly proportional to the energy it transfers into the microphone, which we can assume to be directly proportional to the RMS voltage. Hence, we will say that
 
-Hence $\sqrt{I_L / I_R} = \sqrt{V_L / V_R}$, where $V_L$ and $V_R$ are deviations from ambient readings as absolute values.
+$\frac{I_L}{I_R} = \frac{V_{RMS_L}}{V_{RMS_R}}$
 
-CHANGE THIS PART
+The voltage measured at the analog output also contains a constant DC signal, which is equivalent to the ambient voltage. The information about our soundwave is carried by the generated AC signal, so we only want to compare the AC component of the voltage, that is the difference between the total measured voltage and the ambient reading 
+
+$V_{AC}$ = $\left| V_{measured} - V_{ambient} \right|$
+
+The RMS voltage will be the square root of the average of squared voltage values, or more formally, if $(V_1,   V_2,   V_3,   ... ,   V_n)$ are our isolated AC components, then the RMS voltage is 
+
+$V_{RMS} = \sqrt{\frac{1}{n}\sum_{i=1}^{n} V_i^2}$
+
+We will take measurements and calculate this for both sensors, and thus calculate the ratio of distances.
 
 ## Geometry & Trigonometry
 
@@ -69,7 +77,7 @@ When $b > a$, $k > 1$, and so $a > 0$
 
 Following the same steps when $a > b$, we get
 
-$a = \frac{x}{1 - k}$, and since now $k < 1$, $a > 0$
+$a = \frac{vΔt}{1 - k}$, and since now $k < 1$, $a > 0$
 
 In both cases the only thing changing in the expression is the sign. We only want to find the positive values of $a$ and $b$ with a simple formula, so for both cases we can just say
 
@@ -81,13 +89,13 @@ And then $b = ak$
 
 Now that we know all the side lengths of the triangle, we can apply law of cosines for each angle respectively
 
-$AB = \frac{180}{π} \cos^{-1}(\frac{a^2 + b^2 - d^2}{2ab})$
+$AB = \cos^{-1}(\frac{a^2 + b^2 - d^2}{2ab})$
 
 
-$AD = \frac{180}{π} \cos^{-1}(\frac{a^2 + d^2 - b^2}{2ad})$
+$AD = \cos^{-1}(\frac{a^2 + d^2 - b^2}{2ad})$
 
 
-$BD = \frac{180}{π} \cos^{-1}(\frac{b^2 + d^2 - a^2}{2bd})$
+$BD = \cos^{-1}(\frac{b^2 + d^2 - a^2}{2bd})$
 
 
 Our servo is located directly between the sensors, at a point we'll call $S$. The angle we want to calculate to move the servo is $α$, as depicted in the picture.
@@ -97,3 +105,42 @@ Our servo is located directly between the sensors, at a point we'll call $S$. Th
 
 
 The new angle $α$ is the final angle we want to calculate for our servo, since in the picture below all the way to the left is $0°$ and all the way to the right $180°$
+
+
+<img width="565" height="395" alt="kuva" src="https://github.com/user-attachments/assets/8454378e-8510-438e-8a9e-181591bda870" />
+
+
+
+
+Let's draw some lines to make a right triangle. Since we already know one of the side lengths and angles, we can figure out the rest with sine and cosine.
+
+<img width="465" height="345" alt="kuva" src="https://github.com/user-attachments/assets/4636d1e5-d68d-4550-a5e8-9121afc20f58" />
+
+
+
+Keeping in mind that $S$ splits the line between $R$ and $L$, we know that $SR = SL = \frac{d}{2}$
+
+
+ <img width="499" height="343" alt="kuva" src="https://github.com/user-attachments/assets/6d772138-a62a-42c4-9c0d-c4d0adc08a24" />
+
+ 
+From this we can see that
+ 
+ 
+ $\tan{α} = \frac{a \sin{AD}}{\frac{d}{2} - \cos{AD}}$
+
+
+ And so
+ 
+ 
+ $α = \tan^{-1}(\frac{a \sin{AD}}{\frac{d}{2} - \cos{AD}})$
+
+
+If the sound is coming from the left but $P$ is to the right of $L$, we can derive the same formula by drawing the right angle triangle like so:
+
+
+<img width="397" height="215" alt="kuva" src="https://github.com/user-attachments/assets/da364698-2742-4d60-bc68-eb52792aeba0" />
+
+If the sound comes from the right, then we can do the same method but with $b$ and $BD$, and then calculating $180° - α$
+
+And now we know which angle to write to the servo.
