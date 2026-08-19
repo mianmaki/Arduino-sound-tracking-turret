@@ -79,7 +79,7 @@ $a = \frac{x}{\left| 1 - k \right|}$
 And then $b = ak$
 
 
-Now that we know all the side lengths of the triangle, we can apply law of cosines for each angle respectively (while also converting to degrees)
+Now that we know all the side lengths of the triangle, we can apply law of cosines for each angle respectively
 
 $AB = \frac{180}{π} \cos^{-1}(\frac{a^2 + b^2 - d^2}{2ab})$
 
@@ -92,7 +92,8 @@ $BD = \frac{180}{π} \cos^{-1}(\frac{b^2 + d^2 - a^2}{2bd})$
 
 Our servo is located directly between the sensors, at a point we'll call $S$. The angle we want to calculate to move the servo is $α$, as depicted in the picture.
 
-<img width="826" height="660" alt="kuva" src="https://github.com/user-attachments/assets/2781ce8d-9d49-4479-8014-2db32a15889b" />
+<img width="538" height="390" alt="kuva" src="https://github.com/user-attachments/assets/857fb71b-f7a0-424b-b414-90a645dc75fd" />
 
 
-Now we have a new length, between $S$ and $P$, which we'll call $l$.
+
+The new angle $α$ is the final angle we want to calculate for our servo, since in the picture below all the way to the left is $0°$ and all the way to the right $180°$
