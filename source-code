@@ -1,1 +1,297 @@
+#include <avdweb_AnalogReadFast.h> // normal analogread takes like 100 μs, the fast version is closer to 20
+#include <Servo.h>
+#include <math.h>
 
+
+// sensor analog and digital pins
+int An_R = A0;
+int Di_R = 2;
+int An_L = A1;
+int Di_L = 3;
+
+int Red_LED = 7;
+int Green_LED = 8;
+bool move_servo = false;
+int Digi_R;
+int Digi_L;
+int average_R;
+int average_L;
+float correction;
+bool R_set_off = false;
+bool L_set_off = false;
+int Analog_R;
+int Analog_L;
+float d = 0.15;  // distance between sensors, meters
+int delta_t;     // time difference between sensors
+float a;         // a and b distances from sound source source to sensors
+float b;         
+float k;         // ratio of distances, k = b / a
+float v = 343e-6;  // speed of sound, m/μs
+
+int Servo_pin = 11;
+Servo servo;
+
+void setup() {
+  // put your setup code here, to run once:
+  Serial.begin(115200); // using higher baud rate for faster communication
+  pinMode(An_R, INPUT);
+  pinMode(Di_R, INPUT);
+  pinMode(An_L, INPUT);
+  pinMode(Di_L, INPUT);
+  pinMode(Red_LED, OUTPUT);
+  pinMode(Green_LED, OUTPUT);
+  servo.attach(Servo_pin);
+  servo.write(90); // reset servo to point straight ahead
+}
+
+// due to the nature of the project, sometimes measurements will be completely nonsensical, if this ever happens, we will call this function and the red LED will show that something went wrong
+void measurement_error() {
+  digitalWrite(Red_LED, HIGH);
+  delay(1000);
+  digitalWrite(Red_LED, LOW);
+  move_servo = false;
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+
+  Digi_R = digitalRead(Di_R);
+  Digi_L = digitalRead(Di_L);
+
+  if (Digi_R == 0 && Digi_L == 0) { // checking to see that both sensors are not activated and that we are in ambient conditions
+
+    int arb_time_unit = 0;
+    int loop_length = 100;
+
+    long R_sum = 0;
+    long L_sum = 0;
+
+    // collecting ambient values and summing them
+    while (arb_time_unit < loop_length) {
+      int test_a_R = analogReadFast(An_R);
+      int test_a_L = analogReadFast(An_L);
+      R_sum = R_sum + test_a_R;
+      L_sum = L_sum + test_a_L;
+      arb_time_unit++;
+    }
+
+
+    // calculating average ambient value for each sensor
+
+                                     // with my sensors it might be like: (depending on noise environment)
+    average_R = R_sum / loop_length; // 391
+    average_L = L_sum / loop_length; // 398
+
+    // adding correction factor due to sensitivity mismatch
+    correction = float(average_R) / float(average_L);
+    move_servo = true;
+  }
+
+  // collecting ambient noise values in an array and capturing the moment oscillation begins within the array
+
+  int ambient_length = 10; // length 10 because each iteration takes 48 μs and the max value of delta_t ≈ 440 μs so this array should be able to capture all possible time differences
+
+  int ambient_array_R[ambient_length] = {};
+  int ambient_array_L[ambient_length] = {};
+  int index = 0;
+  float threshold_R = 12; // trial and error said this is a good treshold
+  float threshold_L = 12 / correction; // values of L will grow slightly faster with my sensors so making the threshold match the sensitivities
+
+  // checking if the analog value is high/low enough yet
+  int Check_R;
+  int Check_L;
+
+  bool R_sensed;
+  bool L_sensed;
+  
+
+  while (move_servo) {
+    
+    Check_R = analogReadFast(An_R);
+    Check_L = analogReadFast(An_L); // 18 μs per, 36 total for both reads
+    
+
+    // if the analog value deviates enough from ambient, then we know sound has been sensed
+    R_sensed = abs(Check_R - average_R) > threshold_R;
+    L_sensed = abs(Check_L - average_L) > threshold_L;
+
+
+    
+    if (index == ambient_length - 1) {
+      // once the array is full, we'll shift the elements by one to make space for new values
+      for (int i = 0; i < ambient_length - 1; i++) {
+        ambient_array_R[i] = ambient_array_R[i + 1];
+        ambient_array_L[i] = ambient_array_L[i + 1];
+      }
+      ambient_array_R[index] = Check_R;
+      ambient_array_L[index] = Check_L;
+      // green LED shows when the program has finished measuring ambient noise and is ready for a sound again
+      digitalWrite(Green_LED, HIGH);
+    }
+
+    else {
+      // filling the first elements of the array
+      ambient_array_R[index] = Check_R;
+      ambient_array_L[index] = Check_L;
+      index++;
+    }
+
+
+    // using separate variables so that when sound has been sensed once, it doesn't need to be sensed again
+    if (R_sensed && !R_set_off) {
+      R_set_off = true;
+    }
+    
+    if (L_sensed && !L_set_off) {
+      L_set_off = true;
+    }
+
+    // waits for both sensors to get triggered
+    if (R_set_off && L_set_off) {
+
+      // turning off green LED to show we're not waiting for sound anymore
+      digitalWrite(Green_LED, LOW);
+
+      // resetting variables for future measurements
+      R_set_off = false;
+      L_set_off = false;
+
+      // found with some trial and error and calculations of sound travel time from common distances to be a suitable amount of data
+      int n_data_points = 13;
+
+
+      int Values_R[n_data_points] = {};
+      int Values_L[n_data_points] = {};
+
+      for (int i = 0; i < n_data_points; i++) { // 36 μs per cycle
+        // collecting our voltage samples, some potential inaccuracy cuz theres 18 μs in between reads and we only start measuring once both waveforms started rising so we miss a bit of the other one :/
+       
+        Analog_R = analogReadFast(An_R);
+        Analog_L = analogReadFast(An_L);
+
+        Values_R[i] = Analog_R;
+        Values_L[i] = Analog_L;
+      }
+
+      // index for each ambient array when sound is first sensed
+      int i_R;
+      int i_L;
+
+      for (int i = 0; i < ambient_length; i++) {
+        if (abs(ambient_array_R[i] - average_R) > threshold_R) {
+          i_R = i;
+          break;
+        }
+      }
+
+      for (int i = 0; i < ambient_length; i++) {
+        if (abs(ambient_array_L[i] - average_L) > threshold_L) {
+          i_L = i;
+          break;
+        }
+      }
+
+      // sometimes i got funny values, now its consistently logical indices, and also maybe they could be somehow uninitialized??? at this point this is kinda just in case
+      if (!((0 <= i_R && i_R <= 9) && (0 <= i_L && i_L <= 9))) {
+        measurement_error();
+      }
+
+      // looking at which index sound was sensed for each sensor and calculating delta_t by the amount of time between iterations, measured to be 48 μs, managed to improve from 92 :)
+      int delta_i = abs(i_R - i_L);
+
+
+      delta_t = delta_i * 48; // μs
+
+
+      // calculating RMS values
+      unsigned long R_sq_sum = 0;
+      unsigned long L_sq_sum = 0;
+
+
+      for (int i = 0; i < n_data_points; i++) {
+        int AC_voltage_R = abs(Values_R[i] - average_R);
+        int AC_voltage_L = abs(Values_L[i] - average_L);
+
+        R_sq_sum = R_sq_sum + pow(AC_voltage_R, 2);
+        L_sq_sum = L_sq_sum + pow(AC_voltage_L, 2);
+      }
+
+
+      float V_R_RMS = sqrt(float(R_sq_sum) / n_data_points);
+      float V_L_RMS = sqrt(float(L_sq_sum) / n_data_points);
+
+
+      
+
+
+      // finally adding correction factor to try to make up for sensitivity mismatch
+      k = sqrt(correction * V_L_RMS / V_R_RMS);
+
+      // checking for logic: if L is hit first, then L should read a higher RMS voltage, vice versa
+      bool L_first = i_L < i_R;
+      bool R_first = i_R < i_L;
+      bool L_greater = V_L_RMS > V_R_RMS;
+      bool R_greater = V_R_RMS > V_L_RMS;
+
+
+      bool predetermine_angle = false;
+
+
+      // if intensity ratios close enough, we get k ≈ 1 and calculating a and b might be more unreliable, so if voltages and ambient indices are close enough to each other, just turn the servo to 90°
+      if ((abs(1 - k*k) < 0.15 && abs(i_R - i_L) <= 2)) {
+        predetermine_angle = true;
+      }
+      
+      else if (!(L_first == L_greater && R_first == R_greater)) {
+        measurement_error();
+      }
+      
+      
+      // math
+      a = v * float(delta_t) / abs(1 - k);
+      b = a * k;
+
+      // inside of acos values so we dont get 1.0001 or something inside acos
+
+      float AB_in = (-d*d + a*a + b*b) / (2 * a * b);
+      float AD_in = (-b*b + d*d + a*a) / (2 * a * d);
+      float BD_in = (-a*a + d*d + b*b) / (2 * b * d);
+
+      AB_in = constrain(AB_in, -1.0, 1.0);
+      AD_in = constrain(AD_in, -1.0, 1.0);
+      BD_in = constrain(BD_in, -1.0, 1.0);
+      // making sure a noisy measurement doesn't make it barely undefined
+
+      float AB = acos(AB_in);
+      float AD = acos(AD_in);
+      float BD = acos(BD_in);
+
+
+
+      if (!predetermine_angle) {
+      int alpha;
+
+        // calculating servo angle or alpha
+        if (AD > BD) {
+          alpha = 180 / M_PI * atan2(a * sin(AD),  d / 2 - a * cos(AD));
+        }
+
+        else {
+          alpha = 180 - 180 / M_PI * atan2(b * sin(BD), d / 2 - b * cos(BD));
+        }
+
+        // only if measurement_error() was never called, will the servo finally be turned
+        if (move_servo) {
+          servo.write(alpha);
+        }
+      }
+
+      else {
+        servo.write(90);
+      }
+
+      delay(2000); // some time in between and also to let echoes die out
+      move_servo = false;
+    }
+  }
+}
