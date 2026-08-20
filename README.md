@@ -3,7 +3,7 @@
 ## Overview
 
 A turret that turns a servo motor to point roughly in the same direction as the direction a sound comes from. It utilizes 2 sound sensors and compares the differences in measured sound intensity and sound arrival time.
-I was interested in making some kind of turret as a personal project that can take an input (sound, light, heat, etc.) and figure out the direction it comes from. This is a modified version of my face tracking nerf gun turret.
+I was interested in making some kind of turret as a personal project that can take an input (sound, light, heat, etc.) and figure out the direction it comes from.
 
 ## How it works
 
